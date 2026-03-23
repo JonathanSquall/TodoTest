@@ -1,0 +1,11 @@
+﻿################################################################################
+# Ce fichier .gitignore a été automatiquement créé par Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/TodoTest.slnx
+/TodoTest/bin/Debug/net10.0
+/TodoTest/obj/Debug/net10.0
+/TodoTest.Client/bin/Debug/net10.0
+/TodoTest.Client/obj/Debug/net10.0
+/TodoTest.Client/obj
+/TodoTest/obj
