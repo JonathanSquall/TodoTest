@@ -1,0 +1,54 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+@using TodoTest.Models
+@using Microsoft.EntityFrameworkCore
+
+@inject TodoTest.Data.AppDbContext Db
+
+<h3>Ma Todo List</h3>
+
+<input @bind="newTitle" placeholder="Nouvelle tâche..." />
+<button @onclick="AddTodo">Ajouter</button>
+
+<ul>
+    @foreach (var todo in todos)
+    {
+        <li>
+            <input type="checkbox" checked="@todo.IsDone"
+                   @onchange="() => ToggleTodo(todo)" />
+            @todo.Title
+            <button @onclick="() => DeleteTodo(todo)">Supprimer</button>
+        </li>
+    }
+</ul>
+
+@code {
+    private List<TodoItem> todos = [];
+    private string newTitle = string.Empty;
+
+    protected override async Task OnInitializedAsync() => todos = await Db.Todos.ToListAsync();
+
+    private async Task AddTodo()
+    {
+        if (string.IsNullOrWhiteSpace(newTitle)) return;
+        var item = new TodoItem { Title = newTitle };
+        Db.Todos.Add(item);
+        await Db.SaveChangesAsync();
+        todos.Add(item);
+        newTitle = string.Empty;
+    }
+
+    private async Task ToggleTodo(TodoItem todo)
+    {
+        todo.IsDone = !todo.IsDone;
+        await Db.SaveChangesAsync();
+    }
+
+    private async Task DeleteTodo(TodoItem todo)
+    {
+        Db.Todos.Remove(todo);
+        await Db.SaveChangesAsync();
+        todos.Remove(todo);
+    }
+}
