@@ -57,7 +57,11 @@ else
     app.UseHsts();
 }
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
-app.UseHttpsRedirection();
+
+if (System.Diagnostics.Debugger.IsAttached) // Pas utile et instable sur RENDER donc je le laisse pour mon debug
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAntiforgery();
 
