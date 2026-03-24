@@ -13,6 +13,7 @@ builder.Services.AddRazorComponents()
 // Connexion PostgreSQL
 string connectionString;
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
 if (databaseUrl != null)
 {
     var uri = new Uri(databaseUrl);
@@ -27,10 +28,16 @@ if (databaseUrl != null)
         Password = Uri.UnescapeDataString(userInfo[1]),
         SslMode = SslMode.Require
     }.ConnectionString;
+
+    //builder.Services.AddDbContext<AppDbContext>(opt =>
+    //    opt.UseNpgsql(connectionString));
 }
-else // Local/Debug
+else // Local/Debug --> SQL Server
 {
     connectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+
+    //builder.Services.AddDbContext<AppDbContext>(opt =>
+    //    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 }
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
